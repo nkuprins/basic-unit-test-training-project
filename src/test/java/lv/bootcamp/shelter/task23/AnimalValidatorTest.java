@@ -1,5 +1,6 @@
 package lv.bootcamp.shelter.task23;
 
+import lv.bootcamp.shelter.model.Animal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -8,7 +9,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -110,37 +114,47 @@ class AnimalValidatorTest {
         @Test
         @DisplayName("throws NullPointerException for null animal")
         void shouldThrowForNullAnimal() {
-            // TODO: Call validator.validate(null)
-            // TODO: Verify it throws NullPointerException
-            // TODO: Check message contains "must not be null"
+            assertThatThrownBy(() -> validator.validate(null))
+                    .isInstanceOf(NullPointerException.class)
+                    .hasMessageContaining("must not be null");
         }
 
         @Test
         @DisplayName("throws for animal with blank name")
         void shouldThrowForBlankName() {
-            // TODO: Create an Animal with blank name
-            // TODO: Verify validate() throws IllegalArgumentException
+            Animal animal = new Animal("", "Dog", 3, true, LocalDate.now());
+
+            assertThatThrownBy(() -> validator.validate(animal))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("Name must not be blank");
         }
 
         @Test
         @DisplayName("throws for animal with blank species")
         void shouldThrowForBlankSpecies() {
-            // TODO: Create an Animal with valid name but blank species
-            // TODO: Verify validate() throws IllegalArgumentException
+            Animal animal = new Animal("Buddy", "", 3, true, LocalDate.now());
+
+            assertThatThrownBy(() -> validator.validate(animal))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("Species must not be blank");
         }
 
         @Test
         @DisplayName("throws for animal with negative age")
         void shouldThrowForNegativeAge() {
-            // TODO: Create an Animal with negative age
-            // TODO: Verify validate() throws IllegalArgumentException
+            Animal animal = new Animal("Buddy", "Dog", -1, true, LocalDate.now());
+
+            assertThatThrownBy(() -> validator.validate(animal))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("Age must not be negative");
         }
 
         @Test
         @DisplayName("does not throw for fully valid animal")
         void shouldPassForValidAnimal() {
-            // TODO: Create a valid Animal (name="Buddy", species="Dog", age=3, vaccinated=true, date=today)
-            // TODO: Call validate() and verify no exception is thrown
+            Animal animal = new Animal("Buddy", "Dog", 3, true, LocalDate.now());
+
+            assertDoesNotThrow(() -> validator.validate(animal));
         }
     }
 }
