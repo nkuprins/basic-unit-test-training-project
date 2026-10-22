@@ -1,0 +1,16 @@
+Task 8 - Coverage
+
+Ran all test suites. Coverage is 84%(145/171) lines and 63%(65/102) branches.
+
+2 untested branches:
+
+1. AnimalCsvParse.parseRow
+Missing coverage 'name.isEmpty() || species.isEmpty()'.
+Name hits but species not: a row with name but not species.
+Would test catch real bugs?
+Yes, "Buddy,,3,true,2026-01-15" is a case that would pass without emptiness check on species.
+
+2. AnimalCsvParse.parseFile
+Missing coverage 'head == null'. Never hits.
+Would test catch real bugs?
+No, the while loop below also checks the null, so it would not run on null.
